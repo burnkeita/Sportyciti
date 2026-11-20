@@ -35,6 +35,16 @@ Schedule::job(new SyncFootballData('dates'))->everyThreeHours()->name('football-
 Schedule::job(new SyncFootballData('standings'))->everyTwoHours()->name('football-standings');
 Schedule::job(new SyncFootballData('season'))->dailyAt('03:15')->name('football-season');
 
+// ---- Queue on shared hosting -----------------------------------------------
+// Hosts without a process supervisor (e.g. DirectAdmin shared hosting) set QUEUE_VIA_SCHEDULER=true
+// so the per-minute cron processes queued jobs (image optimisation, emails, data syncs).
+if (config('queue.via_scheduler')) {
+    Schedule::command('queue:work --stop-when-empty --max-time=50 --tries=3')
+        ->everyMinute()
+        ->withoutOverlapping(5)
+        ->name('queue-via-scheduler');
+}
+
 // ---- Housekeeping ----------------------------------------------------------
 Schedule::command('sportsdata:prune-logs')->daily();
 Schedule::command('queue:prune-failed --hours=168')->daily();

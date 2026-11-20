@@ -6,7 +6,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
@@ -29,3 +29,16 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
     })->create();
+
+/*
+ * Shared hosting (DirectAdmin / cPanel): the application lives outside the web root and the
+ * domain's public_html folder sits next to it. When that layout is detected, public_html is the
+ * public path, so built assets, uploads (storage link) and the Vite manifest resolve correctly.
+ */
+$sharedHostPublicPath = dirname(__DIR__, 2).'/public_html';
+
+if (is_file($sharedHostPublicPath.'/index.php')) {
+    $app->usePublicPath($sharedHostPublicPath);
+}
+
+return $app;

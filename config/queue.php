@@ -126,4 +126,16 @@ return [
         'table' => 'failed_jobs',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Process The Queue From The Scheduler
+    |--------------------------------------------------------------------------
+    |
+    | For shared hosting without a process supervisor: when enabled, the
+    | per-minute scheduler cron also works through queued jobs.
+    |
+    */
+
+    'via_scheduler' => (bool) env('QUEUE_VIA_SCHEDULER', false),
+
 ];
