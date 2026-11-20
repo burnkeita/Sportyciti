@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
+@source '../../app/**/*.php';
+
+/* Class-based dark mode (toggled by the header switch, defaults to OS preference). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* SportyCiti brand */
+    --color-navy-50: #eef3fa;
+    --color-navy-100: #d5e1f1;
+    --color-navy-200: #a9c0e0;
+    --color-navy-300: #6f93c4;
+    --color-navy-400: #3d679f;
+    --color-navy-500: #1f4a80;
+    --color-navy-600: #143765;
+    --color-navy-700: #0e2a4f;
+    --color-navy-800: #0b2240;
+    --color-navy-900: #081b33;
+    --color-navy-950: #050f1f;
+
+    --color-pitch-50: #ecfdf4;
+    --color-pitch-100: #d1fae4;
+    --color-pitch-200: #a6f4cb;
+    --color-pitch-300: #6be8ab;
+    --color-pitch-400: #32d388;
+    --color-pitch-500: #12b76a;
+    --color-pitch-600: #079455;
+    --color-pitch-700: #067647;
+    --color-pitch-800: #085d3a;
+    --color-pitch-900: #074d31;
+
+    --color-flame-50: #fff6ed;
+    --color-flame-100: #ffead5;
+    --color-flame-200: #ffd1a8;
+    --color-flame-300: #ffb070;
+    --color-flame-400: #ff9233;
+    --color-flame-500: #ff7a00;
+    --color-flame-600: #e06400;
+    --color-flame-700: #b84d02;
+    --color-flame-800: #933e0a;
+    --color-flame-900: #77350b;
+
+    --color-mist: #f5f7fa;
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        @apply bg-mist font-sans text-slate-800 antialiased dark:bg-navy-950 dark:text-slate-200;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-display tracking-tight;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-flame-500;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .container-page {
+        @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .card {
+        @apply rounded-xl bg-white shadow-sm ring-1 ring-slate-200/70 dark:bg-navy-900 dark:ring-white/10;
+    }
+
+    .section-title {
+        @apply flex items-center gap-3 font-display text-lg font-extrabold uppercase tracking-wide text-navy-900 dark:text-white;
+    }
+
+    .section-title::before {
+        content: '';
+        @apply inline-block h-5 w-1.5 rounded-full bg-pitch-500;
+    }
+
+    .chip {
+        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider;
+    }
+
+    .btn-primary {
+        @apply btn bg-pitch-500 text-white hover:bg-pitch-600;
+    }
+
+    .btn-accent {
+        @apply btn bg-flame-500 text-white hover:bg-flame-600;
+    }
+
+    .btn-ghost {
+        @apply btn bg-slate-100 text-navy-900 hover:bg-slate-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/15;
+    }
+
+    .input {
+        @apply block w-full rounded-lg border-0 bg-white px-3.5 py-2.5 text-sm text-slate-900 ring-1 ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-pitch-500 dark:bg-navy-800 dark:text-white dark:ring-white/15;
+    }
+
+    .label {
+        @apply mb-1.5 block text-sm font-semibold text-slate-700 dark:text-slate-300;
+    }
+
+    .tab {
+        @apply whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10;
+    }
+
+    .tab-active {
+        @apply bg-navy-900 text-white hover:bg-navy-900 dark:bg-pitch-500 dark:hover:bg-pitch-500;
+    }
+
+    .link-underline {
+        @apply bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-left-bottom bg-no-repeat transition-[background-size] duration-300 group-hover:bg-[length:100%_2px];
+    }
+
+    /* Article body typography */
+    .article-body {
+        @apply prose prose-lg max-w-none prose-slate dark:prose-invert
+            prose-headings:font-display prose-headings:text-navy-900 dark:prose-headings:text-white
+            prose-a:text-pitch-700 prose-a:underline-offset-2 dark:prose-a:text-pitch-400
+            prose-img:rounded-xl prose-blockquote:border-l-flame-500 prose-blockquote:font-medium
+            prose-figcaption:text-sm;
+    }
+
+    .article-body iframe {
+        @apply aspect-video h-auto w-full rounded-xl;
+    }
+}
+
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@utility scrollbar-none {
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Breaking-news ticker */
+@keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+.ticker-track {
+    animation: ticker var(--ticker-duration, 40s) linear infinite;
+}
+
+.ticker-track:hover,
+.ticker-track:focus-within {
+    animation-play-state: paused;
+}
+
+@keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+.live-dot {
+    animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker-track, .live-dot {
+        animation: none;
+    }
+    * {
+        scroll-behavior: auto !important;
+    }
+}
