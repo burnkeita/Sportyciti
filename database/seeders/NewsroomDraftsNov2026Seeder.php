@@ -61,7 +61,7 @@ class NewsroomDraftsNov2026Seeder extends Seeder
                 'category_id' => $sub->parent_id ?? $sub->id,
                 'subcategory_id' => $sub->parent_id ? $sub->id : null,
                 'author_id' => $desk->id,
-                'featured_media_id' => isset($a['image']) ? $media[$a['image']]->id : null,
+                'featured_media_id' => isset($a['image'], $media[$a['image']]) ? $media[$a['image']]->id : null,
                 'review_notes' => 'Researched from published reports on 15 Nov 2026. Verify facts against the sources listed at the bottom before publishing.',
             ]);
 
