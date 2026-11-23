@@ -16,6 +16,12 @@ class SeoController extends Controller
 {
     private const XML = ['Content-Type' => 'application/xml; charset=UTF-8'];
 
+    /**
+     * Added here rather than in the Blade templates: on servers with PHP's short_open_tag enabled,
+     * a "<?xml" sequence in a compiled template is parsed as PHP and causes a syntax error.
+     */
+    private const XML_DECLARATION = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+
     /** Sitemap index: one sitemap per month of articles plus a static-pages sitemap. */
     public function sitemapIndex(): Response
     {
@@ -31,7 +37,7 @@ class SeoController extends Controller
             return view('seo.sitemap-index', ['months' => $months])->render();
         });
 
-        return response($xml, 200, self::XML);
+        return response(self::XML_DECLARATION.$xml, 200, self::XML);
     }
 
     public function articleSitemap(int $year, int $month): Response
@@ -49,7 +55,7 @@ class SeoController extends Controller
             return view('seo.sitemap-articles', ['articles' => $articles])->render();
         });
 
-        return response($xml, 200, self::XML);
+        return response(self::XML_DECLARATION.$xml, 200, self::XML);
     }
 
     public function pagesSitemap(): Response
@@ -61,7 +67,7 @@ class SeoController extends Controller
             'videos' => Video::query()->published()->get(['slug', 'updated_at']),
         ])->render());
 
-        return response($xml, 200, self::XML);
+        return response(self::XML_DECLARATION.$xml, 200, self::XML);
     }
 
     /** Google News sitemap: articles published in the last 48 hours (max 1,000). */
@@ -76,7 +82,7 @@ class SeoController extends Controller
                 ->latest('published_at')->limit(1000)->get(),
         ])->render());
 
-        return response($xml, 200, self::XML);
+        return response(self::XML_DECLARATION.$xml, 200, self::XML);
     }
 
     public function robots(): Response
@@ -116,6 +122,6 @@ class SeoController extends Controller
                 ->latest('published_at')->limit(30)->get(),
         ])->render());
 
-        return response($xml, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
+        return response(self::XML_DECLARATION.$xml, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
     }
 }

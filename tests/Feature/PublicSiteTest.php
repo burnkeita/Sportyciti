@@ -109,6 +109,18 @@ class PublicSiteTest extends TestCase
             ->assertDontSee('Secret squad draft');
     }
 
+    public function test_xml_feeds_start_with_declaration_and_templates_avoid_short_open_tags(): void
+    {
+        foreach (['/sitemap.xml', '/sitemaps/pages.xml', '/news-sitemap.xml', '/feed'] as $url) {
+            $this->assertStringStartsWith('<?xml version="1.0" encoding="UTF-8"?>', $this->get($url)->assertOk()->getContent(), $url);
+        }
+
+        // "<?xml" inside a Blade template breaks on hosts with short_open_tag enabled.
+        foreach (glob(resource_path('views/seo/*.blade.php')) as $template) {
+            $this->assertStringNotContainsString('<?', file_get_contents($template), basename($template));
+        }
+    }
+
     public function test_seo_endpoints(): void
     {
         $this->get('/sitemap.xml')->assertOk()->assertHeader('Content-Type', 'application/xml; charset=UTF-8');

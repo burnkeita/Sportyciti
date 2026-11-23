@@ -1,4 +1,3 @@
-{!! '<?xml version="1.0" encoding="UTF-8"?>' !!}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 @foreach ([route('home'), route('football.index'), route('football.scores'), route('football.fixtures'), route('football.results'), route('football.competitions.index'), route('football.transfers.index'), route('insights.index'), route('videos.index'), route('galleries.index'), route('authors.index'), route('pages.show', 'about'), route('pages.show', 'contact'), route('pages.show', 'editorial-policy')] as $url)
     <url><loc>{{ $url }}</loc></url>
